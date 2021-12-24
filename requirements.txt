@@ -1,0 +1,5 @@
+TensorFlowASR[tf2.x]
+tensorflow~=2.6.0
+tensorflow-text~=2.6.0
+tensorflow-io~=0.20.0
+
