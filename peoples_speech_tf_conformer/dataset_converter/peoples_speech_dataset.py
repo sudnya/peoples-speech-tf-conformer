@@ -17,7 +17,7 @@ limitations under the License.
 import tensorflow as tf
 import numpy as np
 
-from tensorflow_asr.datasets import asr_dataset
+#from tensorflow_asr.datasets import asr_dataset
 from tensorflow_asr.datasets.asr_dataset import ASRDataset
 
 import logging
