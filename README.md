@@ -1,4 +1,3 @@
-# peoples-speech-tf-conformer
 [People’s Speech](https://mlcommons.org/en/peoples-speech/) is among the world’s largest English speech recognition datasets licensed for academic and commercial use. It includes 30,000+ hours of transcribed speech in English with a diverse set of speakers and acoustic environments. This open dataset by [MLCommons.org](https://mlcommons.org/en/) is large enough to train speech-to-text systems and is available with a permissive license.
 
 In this tutorial, we will learn to use this dataset to fine tune a pre-trained model. We’ll train this model locally and leverage pre-trained models released by [TensorflowASR] (https://github.com/TensorSpeech/TensorFlowASR).
@@ -13,8 +12,7 @@ In this tutorial, we will learn to use this dataset to fine tune a pre-trained m
 3. Activate the virtual environment created in the above step using the following command
 `source ~/environments-virtual/your-preferred-environment-name/bin/activate`
 4. Install the [peoples-speech-tf-conformer] as follows
-```cd ~/directory-path-in-step-1/peoples-speech-tf-conformer```
-```pip install .```
+`pip install git+git://github.com/sudnya/peoples-speech-tf-conformer`
 
 # 2. Download the pretrained model
 The [TensorflowASR repository](https://github.com/TensorSpeech/TensorFlowASR) provides a pre-trained model of the subword Conformer ready to be downloaded from [here.](https://drive.google.com/drive/folders/1VAihgSB5vGXwIVTl3hkUk95joxY1YbfW)
