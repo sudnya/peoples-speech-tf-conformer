@@ -14,10 +14,13 @@ In this tutorial, we will learn to use this dataset to fine tune a pre-trained m
 4. Install the [peoples-speech-tf-conformer] as follows
 `pip install git+git://github.com/sudnya/peoples-speech-tf-conformer`
 
-# 2. Download the pretrained model
+# 2. The pretrained model
 The [TensorflowASR repository](https://github.com/TensorSpeech/TensorFlowASR) provides a pre-trained model of the subword Conformer ready to be downloaded from [here.](https://drive.google.com/drive/folders/1VAihgSB5vGXwIVTl3hkUk95joxY1YbfW)
+The [peoples-speech-tf-conformer repo] (https://github.com/sudnya/peoples-speech-tf-conformer) contains the necessary files of this pretrained model.
 
-Download all the files in the above link to your local machine.
+# TODO: add this to the pip install step
+Download all the necessary to your local machine with the following command
+`python download-pretrained.py`
 
 # 3. Download the dataset
 ## TODO: currently only uses a tiny file
