@@ -96,7 +96,8 @@ learning_config:
   test_dataset_config:
     use_tf: True
     data_paths: 
-        - /Users/sudnya/Desktop/one-two-three-data/one-two-three-exported-dataset.jsonlines
+      - /Users/sudnya/Downloads/peoples-speech-dataset/part-00000-4e132642-c01c-4db6-9db0-a1e19193f6f8-c000.json
+        #- /Users/sudnya/Desktop/one-two-three-data/one-two-three-exported-dataset.jsonlines
     tfrecords_dir: null
     shuffle: False
     cache: True

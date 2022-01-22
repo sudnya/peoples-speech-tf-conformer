@@ -1,5 +1,5 @@
 '''
-Copyright [2021] [Sudnya Diamos]
+Copyright [2022] [Sudnya Diamos]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 '''
 
+import jsonlines
 import tensorflow as tf
 import numpy as np
+from pathlib import Path
 
 #from tensorflow_asr.datasets import asr_dataset
 from tensorflow_asr.datasets.asr_dataset import ASRDataset
@@ -40,6 +42,21 @@ logger = tf.get_logger()
 class PeoplesSpeechDataset(ASRDataset):
     """Dataset for ASR using  PeoplesSpeech dataset. Contains jsonlines.
 
+    New Sample Entry:
+    {
+        "audio_document_id": "CC-2016-0404-BudgetFinance_2of2.mp3",
+        "identifier": "CC20160404BudgetFinance2of2",
+        "text_document_id": "CC-2016-0404-BudgetFinance_2of2.asr.srt",
+        "training_data": {
+            "duration_ms": [14080,14700,14650],
+            "label": ["blah blah hahaha", "and what else", "who was he going to"],
+            "name": [
+                "CC20160404BudgetFinance2of2/CC-2016-0404-BudgetFinance_2of2_DOT_mp3_00000.flac",
+                "CC20160404BudgetFinance2of2/CC-2016-0404-BudgetFinance_2of2_DOT_mp3_00001.flac",
+                "CC20160404BudgetFinance2of2/CC-2016-0404-BudgetFinance_2of2_DOT_mp3_00002.flac"
+            ]
+        }
+    }
     Sample entry: 
     {
         "audio_path": "...path-to-/clean-4-one-two-three.flac", 
@@ -56,13 +73,12 @@ class PeoplesSpeechDataset(ASRDataset):
         if hasattr(self, "entries") and len(self.entries) > 0:
             return
         self.entries = []
-        for file_path in self.data_paths:
-            logger.info(f"Custom read entries {file_path} ...")
-            with tf.io.gfile.GFile(file_path, "r") as f:
-                entry = json.loads(f.read())
-                row = entry['audio_path'] + '\t5\t' + self.extract_label(entry['label_path'])            
-                self.entries.append( row )
-        
+
+        dataset_folder_path = self.data_paths[0].rsplit('/', 1)[0]
+        print(dataset_folder_path)
+
+        self.entries = load_peoples_speech(self.data_paths[0])
+    
         # The files is "\t" seperated
         self.entries = [line.split("\t", 2) for line in self.entries]
         for i, line in enumerate(self.entries):
@@ -95,4 +111,25 @@ class PeoplesSpeechDataset(ASRDataset):
             data = json.load(f)
             return '\"' + data['label'] + '\"'
 
+def load_peoples_speech(file_path):
+    base_path = file_path.rsplit('/', 1)[0]
+    records = []
+    with open(file_path) as dataset_file:
+        with jsonlines.Reader(dataset_file) as reader:
+            for entry in reader:
+                dir_path =  base_path + '/' + entry['identifier']
+                if Path(dir_path).exists() and Path(dir_path).is_dir():
+                    records.append(entry)
+    entries = []
 
+    for record in records:
+        filenames = record['training_data']['name']
+        durations = record['training_data']['duration_ms']
+        labels = record['training_data']['label']
+        assert len(filenames) == len(durations) == len(labels)
+        for i in range(len(filenames)):
+            file_path = base_path + '/' + filenames[i]
+            if Path(file_path).exists() and Path(file_path).is_file():
+                row = file_path + '\t' + str(durations[i]) + '\t\"' + labels[i] + '\"'
+                entries.append(row)
+    return entries

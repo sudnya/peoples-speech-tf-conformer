@@ -21,7 +21,9 @@ from tqdm import tqdm
 import argparse
 from tensorflow_asr.utils import env_util, file_util
 import logging
+from peoples_speech_tf_conformer import get_pretrained_model_path
 
+pretrained_model_path = get_pretrained_model_path()
 
 logger = env_util.setup_environment()
 import tensorflow as tf
@@ -34,7 +36,7 @@ parser = argparse.ArgumentParser(prog="Conformer Test for Peoples Speech")
 
 parser.add_argument("--config", type=str, default=DEFAULT_YAML, help="The file path of model configuration file")
 
-parser.add_argument("--saved", type=str, default=None, help="Path to saved model")
+parser.add_argument("--saved", type=str, default=pretrained_model_path, help="Path to saved model")
 
 parser.add_argument("--mxp", default=False, action="store_true", help="Enable mixed precision")
 
@@ -52,7 +54,7 @@ parser.add_argument("--output", type=str, default="test.tsv", help="Result filep
 
 args = parser.parse_args()
 
-assert args.saved
+#assert args.saved
 
 tf.config.optimizer.set_experimental_options({"auto_mixed_precision": args.mxp})
 
@@ -60,7 +62,6 @@ env_util.setup_devices([args.device], cpu=args.cpu)
 
 from tensorflow_asr.configs.config import Config
 from peoples_speech_tf_conformer.dataset_converter.peoples_speech_dataset import PeoplesSpeechDataset
-#from tensorflow_asr.datasets.asr_dataset import PeoplesSpeechDataset
 from tensorflow_asr.featurizers.speech_featurizers import TFSpeechFeaturizer
 from tensorflow_asr.featurizers.text_featurizers import SubwordFeaturizer, SentencePieceFeaturizer, CharFeaturizer
 from tensorflow_asr.models.transducer.conformer import Conformer
